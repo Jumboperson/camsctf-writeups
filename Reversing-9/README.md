@@ -60,7 +60,8 @@ Both routines follow this format.
 
 This means the code for my project is going to look kinda like this:
 
-```int main(unsigned short argc, char** argv)
+```
+int main(unsigned short argc, char** argv)
 {
 	char str[] = "<encrypted crap>";
 	char troystr[0x30];
@@ -76,33 +77,22 @@ This means the code for my project is going to look kinda like this:
 	{
 	    memcpy(otherTroyStr, <other troy crap>, 0x30);
 	}
-
 	// MessageBox cancer //
-
 	// Call that prints the string (I think its cout based on the way the call looks, not sure) //
-
 	char buff00[0x30];
 	char buff01[0x30];
-
 	memcpy(buff00, <something>, 0x2f);
 	memcpy(buff01, <something else>, 0x2f);
-
 	// Another MessageBox //
-
 	char buff02[0x30];
 	char buff03[0x30];
-
 	memcpy(buff02, <something else else>, 0x2f);
 	memcpy(buff03, <something else else else>, 0x2f);
-
 	HGLOBAL hGlob = GlobalAlloc(0x40, 0x102);
-
 	size_t stLength00 = strlen(buff03);
 	first_decrypt(buff03, stLength00, hGlob);
-
 	size_t stLength01 = strlen(buff02);
 	second_decrypt(buff02, stLength01, hGlob);
-
 	// Another MessageBox //
 	return <MessageBoxRetValue>;
 }
