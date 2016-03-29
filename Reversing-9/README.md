@@ -63,38 +63,38 @@ This means the code for my project is going to look kinda like this:
 ```
 int main(unsigned short argc, char** argv)
 {
-	char str[] = "<encrypted crap>";
-	char troystr[0x30];
-	char* pString = str;
-	if (check_debug())
-	{
-		memcpy(troystr, <troy crap>, 0x30);
-	    pString = troystr;
-	}
-	char otherStr[] = "<more encrypted stuff>";
-	char otherTroyStr[0x30]; // ?
-	if (check_debug())
-	{
-	    memcpy(otherTroyStr, <other troy crap>, 0x30);
-	}
-	// MessageBox cancer //
-	// Call that prints the string (I think its cout based on the way the call looks, not sure) //
-	char buff00[0x30];
-	char buff01[0x30];
-	memcpy(buff00, <something>, 0x2f);
-	memcpy(buff01, <something else>, 0x2f);
-	// Another MessageBox //
-	char buff02[0x30];
-	char buff03[0x30];
-	memcpy(buff02, <something else else>, 0x2f);
-	memcpy(buff03, <something else else else>, 0x2f);
-	HGLOBAL hGlob = GlobalAlloc(0x40, 0x102);
-	size_t stLength00 = strlen(buff03);
-	first_decrypt(buff03, stLength00, hGlob);
-	size_t stLength01 = strlen(buff02);
-	second_decrypt(buff02, stLength01, hGlob);
-	// Another MessageBox //
-	return <MessageBoxRetValue>;
+    char str[] = "<encrypted crap>";
+    char troystr[0x30];
+    char* pString = str;
+    if (check_debug())
+    {
+        memcpy(troystr, <troy crap>, 0x30);
+        pString = troystr;
+    }
+    char otherStr[] = "<more encrypted stuff>";
+    char otherTroyStr[0x30]; // ?
+    if (check_debug())
+    {
+        memcpy(otherTroyStr, <other troy crap>, 0x30);
+    }
+    // MessageBox cancer //
+    // Call that prints the string (I think its cout based on the way the call looks, not sure) //
+    char buff00[0x30];
+    char buff01[0x30];
+    memcpy(buff00, <something>, 0x2f);
+    memcpy(buff01, <something else>, 0x2f);
+    // Another MessageBox //
+    char buff02[0x30];
+    char buff03[0x30];
+    memcpy(buff02, <something else else>, 0x2f);
+    memcpy(buff03, <something else else else>, 0x2f);
+    HGLOBAL hGlob = GlobalAlloc(0x40, 0x102);
+    size_t stLength00 = strlen(buff03);
+    first_decrypt(buff03, stLength00, hGlob);
+    size_t stLength01 = strlen(buff02);
+    second_decrypt(buff02, stLength01, hGlob);
+    // Another MessageBox //
+    return <MessageBoxRetValue>;
 }
 ```
 
@@ -167,10 +167,10 @@ int main(unsigned short argc, char** argv)
     char str[] = "\xb3\xff\xf1\x22\x12\xef\xfe\xf8\x05\xae\x36\x88\xfxb1\x92\x38\xed\xf8\x00\x00\x00";
     char troystr[0x30];
     char* pString = str;
-    
+
     if (check_debug())
     {
-        memcpy(troystr, "!\x11\xB7K\x13""C\x91)\x85;\xB8""5aA\x04J\xDA\xCA\x84\xBB\xDA>\xA6\xB0y\xAC\x8F\xF8\xE5\x90\xC9\x9D\x96]hW\xB9\xA1\x81""8\x1C\x01!|\xAB\x8F\xED\x00", 0x30);
+        memcpy(troystr, "!\x11\xB7K\x13C\x91)\x85;\xB85aA\x04J\xDA\xCA\x84\xBB\xDA>\xA6\xB0y\xAC\x8F\xF8\xE5\x90\xC9\x9D\x96]hW\xB9\xA1\x818\x1C\x01!|\xAB\x8F\xED\x00", 0x30);
         pString = troystr;
     }
     
@@ -178,7 +178,7 @@ int main(unsigned short argc, char** argv)
     char otherTroyStr[0x30]; // ?
     if (check_debug())
     {
-        memcpy(otherTroyStr, "pICN{?&\v\x10""E.8\t\x11*F\n~\f&e\x18PUVn\x15W\x19""C\tffec\vWYnD8.h.|b<\x00", 0x30);
+        memcpy(otherTroyStr, "pICN{?&\v\x10E.8\t\x11*F\n~\f&e\x18PUVn\x15W\x19C\tffec\vWYnD8.h.|b<\x00", 0x30);
     }
     
     // MessageBox cancer //
@@ -188,19 +188,19 @@ int main(unsigned short argc, char** argv)
     char buff00[0x30];
     char buff01[0x30];
     
-    memcpy(buff00, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x84""6\xA9\xAEu\xE3\xD3\x00", 0x2f);
-    memcpy(buff01, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x84""6\xA9\xAEu\xE3\xD3\x00", 0x2f);
+    memcpy(buff00, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x846\xA9\xAEu\xE3\xD3\x00", 0x2f);
+    memcpy(buff01, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x846\xA9\xAEu\xE3\xD3\x00", 0x2f);
     
     // Another MessageBox //
     
     char buff02[0x30];
     char buff03[0x30];
     
-    memcpy(buff02, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x84""6\xA9\xAEu\xE3\xD3\x00", 0x2f);
-    memcpy(buff03, "m\x03`\x01!\x0F\x10Vb\x0E\x1A\x1A""6rkbA?qw\x15\x04""EIV[\x06""c\x04G9|R\x06%X7Hj*\x05]\f \x18\x04\x00", 0x2f);
+    memcpy(buff02, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x846\xA9\xAEu\xE3\xD3\x00", 0x2f);
+    memcpy(buff03, "m\x03`\x01!\x0F\x10Vb\x0E\x1A\x1A6rkbA?qw\x15\x04EIV[\x06c\x04G9|R\x06%X7Hj*\x05]\f \x18\x04\x00", 0x2f);
     
-#define dec1 buff03
-#define dec2 buff02
+#define dec1 pString
+#define dec2 otherTroyStr
     HGLOBAL hGlob = GlobalAlloc(0x40, 0x102);
     
     size_t stLength00 = strlen(dec1);
