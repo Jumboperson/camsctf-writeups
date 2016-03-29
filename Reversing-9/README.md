@@ -223,7 +223,8 @@ int main(unsigned short argc, char** argv)
 
 After writing the above code I decided to ask one of the CTF organizers about how close I was, and also for the solution. Here is their response:
 
-```Hey John,
+```
+Hey John,
 
 Your code is almost right on. You've duplicated the decryption and key preparation functions almost exactly. The main function also looks very near the original code. The complexity in this challenge lies in the fact that there are multiple keys and multiple messages, with random crashes and a bunch of asm junk to confuse you. I wrote the problem about a year ago but I have the solution below (currently no write-ups on it yet). Hopefully it'll help you in your understanding of the program and challenge even though it's a bit messy and confusing. If you need addition info, such as the original source code, I may be able to provide that for you.  
 
@@ -232,7 +233,8 @@ Reversing 9: {#wasn't_hard}
 
 Notice the hints that guide you along. You will need to have analyzed previous challenges. Run the program, notice that it displays a message. Nop the ExitProcess, program crashes. Infer that there must be an anti-debugging method or horrible scripting. Notice this is different from previous challenges. Trace program crash to 009F12A1 - A6 (mov eax, 0 + call eax). This is present again after the dword is printed. Nop both. Notice the jz short (discover from previous challenges that it is a debugger check), replace instead with jmp short to automatically skip the custom isdebugger check. Notice the exact same code present from 009F12BE - 009F12F4 and 009F130E - 009F134A. Infer that it is done to mess you up. Replace code at 009F12BE with a jmp to 009F1350. At end of code, jmp back to 009F12A8 to print the message (slightly deformed version due to changes, still readable, can be better if more time is spent to create jmps).
 
--- Lujing Cen```
+-- Lujing Cen
+```
 
 
 It appears as though it may have been intended for users to try different combinations or something similar. Although I did try `xor eax, eax` at the end of the dbg check I missed something else. Apologies.
