@@ -69,7 +69,7 @@ int main(unsigned short argc, char** argv)
 	if (check_debug())
 	{
 		memcpy(troystr, <troy crap>, 0x30);
-	    pString = otherPtr;
+	    pString = troystr;
 	}
 	char otherStr[] = "<more encrypted stuff>";
 	char otherTroyStr[0x30]; // ?
@@ -103,3 +103,115 @@ Now what I noticed when converting this to C is that the decrypts aren't on the 
 Also no part of the original stuff is overwritten, just it decrypts the wrong one. Meaning we probably need to change the first parameter of the decrypts to the buffers that are used.
 
 I'm gonna be testing real quick and then I'll update again...
+
+### Multi-hour break ###
+
+So I wrote a bunch of code to try to replicate what this program does, I've tried swapping out dec1 and dec2 with stuff but to no avail... Not sure what to do.
+
+```
+#include "stdafx.h"
+#include <Windows.h>
+#include <stdio.h>
+
+void byte_swap(char* loc01, char* loc02)
+{
+    char temp = *loc01;
+    *loc01 = *loc02;
+    *loc02 = temp;
+}
+
+void first_decrypt(char* pBuff, size_t stLen, HGLOBAL hGlobal)
+{
+    for (int i = 0; i < 256; ++i)
+    {
+        ((char*)hGlobal)[i] = i;
+    }
+    ((char*)hGlobal)[256] = 0;
+    ((char*)hGlobal)[257] = 0;
+
+    int index = 0;
+    int sum01 = 0;
+    for (int i = 0; i < 256; ++i)
+    {
+        sum01 += ((char*)hGlobal)[i] + pBuff[index];
+        byte_swap(&((char*)hGlobal)[i], &((char*)hGlobal)[sum01]);
+        index = (index + 1) % stLen;
+    }
+}
+
+void second_decrypt(char* pBuff, size_t stLen, HGLOBAL hGlobal)
+{
+    int sec_to_last_byte = ((char*)hGlobal)[256];
+    int last_byte = ((char*)hGlobal)[257];
+
+    for (int i = 0; i < stLen; ++i)
+    {
+        char temp = (sec_to_last_byte + 1) & 0x800000ff;
+        sec_to_last_byte = temp;
+        last_byte += ((char*)hGlobal)[temp];
+        byte_swap(&((char*)hGlobal)[temp], &((char*)hGlobal)[last_byte]);
+        pBuff[i] ^= ((char*)hGlobal)[((char*)hGlobal)[last_byte] + ((char*)hGlobal)[sec_to_last_byte]];
+    }
+    ((char*)hGlobal)[256] = sec_to_last_byte;
+    ((char*)hGlobal)[257] = last_byte;
+}
+
+bool check_debug()
+{
+    // Pretend we're in a debugger.
+    return true;
+}
+
+int main(unsigned short argc, char** argv)
+{
+    char str[] = "\xb3\xff\xf1\x22\x12\xef\xfe\xf8\x05\xae\x36\x88\xfxb1\x92\x38\xed\xf8\x00\x00\x00";
+    char troystr[0x30];
+    char* pString = str;
+    
+    if (check_debug())
+    {
+        memcpy(troystr, "!\x11\xB7K\x13""C\x91)\x85;\xB8""5aA\x04J\xDA\xCA\x84\xBB\xDA>\xA6\xB0y\xAC\x8F\xF8\xE5\x90\xC9\x9D\x96]hW\xB9\xA1\x81""8\x1C\x01!|\xAB\x8F\xED\x00", 0x30);
+        pString = troystr;
+    }
+    
+    char otherStr[] = "\x1b\x08\x7c\x7f\x11\x7e\x10\x59\x32\x6e\x48\x30\x5a\x64\x3c\x40\x17\x28\x00\x00\x00";
+    char otherTroyStr[0x30]; // ?
+    if (check_debug())
+    {
+        memcpy(otherTroyStr, "pICN{?&\v\x10""E.8\t\x11*F\n~\f&e\x18PUVn\x15W\x19""C\tffec\vWYnD8.h.|b<\x00", 0x30);
+    }
+    
+    // MessageBox cancer //
+    
+    // Call that prints the string (I think its cout based on the way the call looks, not sure) //
+    
+    char buff00[0x30];
+    char buff01[0x30];
+    
+    memcpy(buff00, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x84""6\xA9\xAEu\xE3\xD3\x00", 0x2f);
+    memcpy(buff01, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x84""6\xA9\xAEu\xE3\xD3\x00", 0x2f);
+    
+    // Another MessageBox //
+    
+    char buff02[0x30];
+    char buff03[0x30];
+    
+    memcpy(buff02, "\xB0q\xD4\xDDh)\x1D\xCC\xDC\vn\xC3\x94\xF3[\xAA'?!\x1A\xBAw\x13\x97L\xAD\xE4x\xB7<\xB0\xB9\xB6!s;2F}\x84""6\xA9\xAEu\xE3\xD3\x00", 0x2f);
+    memcpy(buff03, "m\x03`\x01!\x0F\x10Vb\x0E\x1A\x1A""6rkbA?qw\x15\x04""EIV[\x06""c\x04G9|R\x06%X7Hj*\x05]\f \x18\x04\x00", 0x2f);
+    
+#define dec1 buff03
+#define dec2 buff02
+    HGLOBAL hGlob = GlobalAlloc(0x40, 0x102);
+    
+    size_t stLength00 = strlen(dec1);
+    first_decrypt(dec1, stLength00, hGlob);
+    
+    size_t stLength01 = strlen(dec2);
+    second_decrypt(dec2, stLength01, hGlob);
+    
+    // Another MessageBox //
+    printf_s("%s\n%s\n%s\n", pString, otherStr, (char*)hGlob);
+    return 0;
+}
+```
+
